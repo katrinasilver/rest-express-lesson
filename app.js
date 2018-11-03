@@ -21,9 +21,6 @@ const authors = [
     ]
   }
 ]
-/*
-  Bonus challenge: Make middleware that checks if the requested author index exists, respond 404 if not.
-*/
 
 app.route('/authors')
   // GET all authors
@@ -33,6 +30,7 @@ app.route('/authors')
   // ADD new author
   .post((req, res) => {
     let name = req.body.name
+
     if (!name) next()
 
     authors.push({ name, books: [] })
@@ -68,28 +66,25 @@ app.route('/authors/:id/books')
     res.status(201).send(authors)
   })
 
-// PATCH specific book by author
-// DELETE specific book by author
-app.route('/authors/:id/books/:bookIndex')
+  app.route('/authors/:id/books/:bookIndex')
+  // PATCH specific book by author
   .patch((req, res) => {
-    // get author ID
     let id = req.params.id
-    let author = authors[id]
-    // get book ID
     let bid = req.params.bookIndex
+
+    let author = authors[id]
     let newBook = req.body.title
-    // check if author or book exist
+
     if (!author || !newBook) next()
 
     author.books.splice(bid, 1, newBook) // patch a book
-    res.status(200).send(authors)
+    res.status(201).send(authors)
   })
+  // DELETE specific book by author
   .delete((req, res) => {
-    // get author ID
     let id = req.params.id
-    let author = authors[id]
-    // get book ID
     let bid = req.params.bookIndex
+    let author = authors[id]
 
     if (!author) next()
 
